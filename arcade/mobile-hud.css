@@ -1,6 +1,14 @@
 /* Touch flight HUD — landscape composition. This sheet is intentionally loaded
    after hud-art.css; desktop artwork and gameplay state are untouched.
    Short landscape viewports have only one safe lower band: thumbs live there. */
+
+/* Narrow portrait phones keep the desk layout, where the plaque is capped at 34vw
+   and real sector names get ellipsized. Give the name room and a smaller size so
+   the player can still read where they are. */
+@media (max-width:640px) and (orientation:portrait) {
+  #hud.cockpit-hud .hud-sector-plaque { max-width: min(64vw, 260px); }
+  #hud.cockpit-hud .hud-sector-plaque strong { font-size: 12px; letter-spacing: .02em; }
+}
 @media (pointer:coarse) and (orientation:landscape) {
   #hud.cockpit-hud .hud-sector-plaque{top:max(5px,env(safe-area-inset-top));left:10px;max-width:190px}
   #hud.cockpit-hud .hud-sector-plaque strong{font-size:10px}

@@ -3630,10 +3630,12 @@ export class ArcadeGame {
   if(Math.hypot(p.vx,p.vy)>150)
    this.heritage.vfx.engineTrail(p.x,p.y,p.angle,'fighter',boosting,dt);
   p.invul=Math.max(0,p.invul-dt);
-  if(this.skillRanks.shield && this.time-this.lastDamageAt>3 &&
-   p.shield<16+this.skillRanks.shield*24)
-   p.shield=Math.min(16+this.skillRanks.shield*24,
-    p.shield+dt*(1.8+this.skillRanks.shield*1.2));
+  // The shield bar is on screen from the first second, so it has to work before any
+  // upgrade is bought; the shield skill raises both the ceiling and the rate.
+  if(this.time-this.lastDamageAt>3 &&
+   p.shield<16+(this.skillRanks.shield||0)*24)
+   p.shield=Math.min(16+(this.skillRanks.shield||0)*24,
+    p.shield+dt*(1.8+(this.skillRanks.shield||0)*1.2));
   if(length(p.x-this.lastX,p.y-this.lastY)>120){
    this.lastX=p.x;this.lastY=p.y;this.stationary=0;
   }else this.stationary+=dt;

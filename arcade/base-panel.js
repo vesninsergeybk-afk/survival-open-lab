@@ -822,8 +822,8 @@ export function renderBasePanel(base,state){
   '<div class="base-home-xp"><span>Опыт '+xp+' / '+nextXp+' · до уровня '+((state.level||1)+1)+' осталось '+Math.max(0,nextXp-xp)+'</span>'+
   '<progress value="'+Math.min(xp,nextXp)+'" max="'+nextXp+'" aria-label="Опыт пилота до следующего уровня"></progress></div>'+
   '<p>'+(state.points?'Есть свободные очки — выберите улучшение.':'Свободных очков нет. За каждый новый уровень получите ещё одно.')+'</p>'+
-  '<div class="base-development-shortcuts">'+[['weapons','Оружие','weapons'],['ship','Корабль','hull'],['tactics','Устройства','pulse'],['pilot','Пилот','navigation']].map(([id,label,icon])=>
-   '<button type="button" data-act="openDevelopment" data-id="'+id+'">'+menuIcon(icon)+label+'</button>').join('')+'</div></section>';
+  (state.points>0?('<div class="base-development-shortcuts">'+[['weapons','Оружие','weapons'],['ship','Корабль','hull'],['tactics','Устройства','pulse'],['pilot','Пилот','navigation']].map(([id,label,icon])=>
+   '<button type="button" data-act="openDevelopment" data-id="'+id+'">'+menuIcon(icon)+label+'</button>').join('')+'</div>'):'')+'</section>';
  const homeUrgent=o.contract.status==='ready'||state.contract&&state.contract.baseId!==base.id||state.operation?
   stationNextStep(base,state,o,!!(regionalGoal||campaign)):
   state.firstHardwareReward==='pending'?'<section class="base-home-reward"><h3>Вы получили новое оружие</h3>'+firstReward+'</section>':
