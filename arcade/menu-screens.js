@@ -25,11 +25,13 @@ export function renderContinuation(saved,issue){
 }
 export function renderDeathScreen(game,failed){
  const checkpoint=game.pendingCheckpoint;
+ // The rollback already is the primary action; state the real cost so the choice is informed.
+ const lostSeconds=checkpoint?Math.max(0,Math.round(game.time-(checkpoint.state?.time||0))):0;
  return '<div class="dialog screen-dialog death-dialog" role="dialog" aria-modal="true" aria-labelledby="death-title">'+
   screenHead('death','СИГНАЛ ПОТЕРЯН','Корабль потерян','death-title')+
   '<div class="screen-metrics"><span>Время<b>'+runClock(game.time)+'</b></span><span>Уровень<b>'+game.player.level+'</b></span><span>Станции<b>'+game.activeBases+'</b></span></div>'+
   '<p class="screen-record">Личный рекорд · '+runClock(game.bestFlight)+'</p>'+
-  (checkpoint?'<p class="screen-warning">Возврат к стыковке отменит события последней вылазки.</p>':
+  (checkpoint?'<p class="screen-warning">Откат к последней станции: отменяется '+runClock(lostSeconds)+' полёта и всё, что добыто после стыковки. Уровни, сплав и улучшения, сохранённые на станции, остаются.</p>':
    '<p class="screen-warning">Контрольной точки нет — вылет начнётся заново. Прогресс сохраняет стыковка с любой станцией: подлетите к ней и нажмите кнопку стыковки.</p>')+
   (failed?'<details class="menu-explanation"><summary>Итоги последней вылазки</summary><p>'+failed.seconds+' с · сплав '+(failed.ore>=0?'+':'')+failed.ore+
    ' · данные '+(failed.data>=0?'+':'')+failed.data+' · повреждения '+failed.details.damageTaken+' · потеряно дронов '+failed.details.dronesLost+'.</p></details>':'')+
