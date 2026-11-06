@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Состояния блока «что сейчас важно» — стенд аудита</title>
+<link rel="stylesheet" href="../arcade/style.css">
+<link rel="stylesheet" href="../arcade/hud.css">
+<link rel="stylesheet" href="../arcade/menu-system.css">
+<link rel="stylesheet" href="../arcade/station-art.css">
+<link rel="stylesheet" href="../arcade/all-menus.css">
+<link rel="stylesheet" href="../arcade/station-terminal-art.css">
+<link rel="stylesheet" href="../arcade/menu-rebuild.css?v=audit-6">
+<style>
+  body { background:#0d1114; padding:24px; font-family:system-ui, sans-serif; }
+  #overlay { position:static; display:block; }
+  .base-dialog { position:static; width:900px; margin:0 auto; }
+  .base-tab-panel { display:block; }
+  h1 { color:#dfe7e9; font-size:16px; margin:22px 0 8px; }
+</style>
+</head>
+<body>
+<div id="overlay" data-mode="base">
+  <div class="dialog base-dialog station-carrier">
+    <div class="base-tab-panel" role="tabpanel">
+
+      <h1>1. Обычное состояние</h1>
+      <section class="base-next-step standard">
+        <div><span class="base-kicker">ЧТО СЕЙЧАС ВАЖНО</span><h3>Выберите следующее задание</h3>
+        <p>Начните с небольшого заказа.</p></div>
+        <div class="base-next-actions">
+          <button type="button" data-act="baseTab" data-role="operations">Посмотреть задания</button>
+        </div>
+      </section>
+
+      <h1>2. Награда (reward)</h1>
+      <section class="base-next-step reward">
+        <div><span class="base-kicker">ЗАКАЗ ВЫПОЛНЕН</span><h3>Заберите награду</h3>
+        <p>Награда ещё не зачислена.</p></div>
+        <div class="base-next-actions">
+          <button type="button" data-act="claimContract">Забрать награду</button>
+        </div>
+      </section>
+
+      <h1>3. Две кнопки (активная операция)</h1>
+      <section class="base-next-step active">
+        <div><span class="base-kicker">ОСОБАЯ ОПЕРАЦИЯ В РАБОТЕ</span><h3>Продолжайте операцию</h3>
+        <p>Условия и награда видны до принятия.</p></div>
+        <div class="base-next-actions">
+          <button type="button" data-act="baseMap">Показать на карте</button>
+          <button type="button" data-act="baseTab" data-role="operations">Условия и награда</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+</body>
+</html>
