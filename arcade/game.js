@@ -12,7 +12,7 @@ import {EXPEDITION_CRUISE,updateCruise} from './expedition-cruise.js?v=expeditio
 import {strategicCapture} from './regional-supply.js?v=living-world-3-radio-shadow-1-home-conflict-1-expedition-1-campaign-1-repair-qa-1-enemy-economy-1-enemy-balance-2-supply-stronghold-1-territory-war-1';
 import {disableCentralWorker} from './central-industry.js?v=living-world-1-home-conflict-1-enemy-balance-2-supply-stronghold-1-territory-war-1';
 import {damageFrontierAsset} from './frontier-industry.js?v=living-world-3-radio-shadow-1-expedition-1-repair-qa-1-supply-stronghold-1-territory-war-1';
-import {grantExperience,experienceFromPickup,firstRichAsteroidExperience,qualifiesForDirectCombatXp,XP_CURVE_VERSION} from './experience.js?v=early-experience-1-xp-feedback-pass1-1-clarity-pass-1';
+import {grantExperience,firstRichAsteroidExperience,qualifiesForDirectCombatXp,XP_CURVE_VERSION} from './experience.js?v=early-experience-1-xp-feedback-pass1-1-clarity-pass-1';
 import {createStrategicExperience,claimStationActivation,claimStationCapture,claimExploration,
  claimContourExpansion,claimFirstFluxDelivery,claimGeologicalSurvey,claimStrategicSabotage} from './strategic-experience.js?v=strategic-xp-pass2-1';
 import {makeRoomForDrop} from './drop-capacity.js?v=xp-feedback-pass1-1';
@@ -1118,6 +1118,8 @@ export class ArcadeGame {
    recordSortieIncome(this,'ore','operation',OPENING_ARC.interceptRewardOre);
    this.cockpit.resourceGain(OPENING_ARC.interceptRewardOre,this.time);
    this.collect({type:'data',value:OPENING_ARC.interceptRewardData,source:'operation'});
+   // The reward pays data for research and XP for the pilot separately.
+   this.awardExperience?.(OPENING_ARC.interceptRewardData);
    this.spawnClock=Math.max(this.spawnClock,15);
    this.rewardNotice('Наводчик уничтожен: патрули у дока стали реже на 2 минуты. '+
     '+'+OPENING_ARC.interceptRewardData+' данных и опыта!',previousLevel,6);
@@ -1654,6 +1656,8 @@ export class ArcadeGame {
   this.cockpit.resourceGain(RELAY_DEFENSE.rewardOre,this.time);
   const previousLevel=this.player.level;
   this.collect({type:'data',value:RELAY_DEFENSE.rewardData});
+  // The reward pays data for research and XP for the pilot separately.
+  this.awardExperience?.(RELAY_DEFENSE.rewardData);
   recordSortieIncome(this,'data','operation',RELAY_DEFENSE.rewardData);
   this.heritage.vfx.nova(op.x,op.y,130,'green');
   this.heritage.station('claimContract',base.type);
@@ -1777,6 +1781,8 @@ export class ArcadeGame {
    this.cockpit.resourceGain(CARRIER_INTERCEPTION.rewardOre,this.time);
    const previousLevel=this.player.level;
    this.collect({type:'data',value:CARRIER_INTERCEPTION.rewardData});
+   // The reward pays data for research and XP for the pilot separately.
+   this.awardExperience?.(CARRIER_INTERCEPTION.rewardData);
    const sabotageXp=this.awardStrategicExperience(claimStrategicSabotage(this.player,'carrier',base.id));
    recordSortieIncome(this,'data','operation',CARRIER_INTERCEPTION.rewardData);
    this.spawnClock=Math.max(this.spawnClock||0,10);
@@ -1911,6 +1917,7 @@ export class ArcadeGame {
   this.cockpit.resourceGain(CORRIDOR_OPERATION.rewardOre,this.time);
   const previousLevel=this.player.level;
   this.collect({type:'data',value:CORRIDOR_OPERATION.rewardData});
+  this.awardExperience(CORRIDOR_OPERATION.rewardData);
   const sabotageXp=this.awardStrategicExperience(claimStrategicSabotage(this.player,'corridor',base.id));
   recordSortieIncome(this,'data','operation',CORRIDOR_OPERATION.rewardData);
   this.heritage.vfx.nova(base.x,base.y,130,'green');
@@ -1957,6 +1964,8 @@ export class ArcadeGame {
   this.cockpit.resourceGain(PROBE_OPERATION.rewardOre,this.time);
   const previousLevel=this.player.level;
   this.collect({type:'data',value:PROBE_OPERATION.rewardData});
+  // The reward pays data for research and XP for the pilot separately.
+  this.awardExperience?.(PROBE_OPERATION.rewardData);
   recordSortieIncome(this,'data','operation',PROBE_OPERATION.rewardData);
   this.heritage.vfx.nova(op.x,op.y,105,'cyan');
   this.heritage.station('claimContract',base.type);
@@ -2591,6 +2600,7 @@ export class ArcadeGame {
    p.ore+=c.ore;this.cockpit.resourceGain(c.ore,this.time);
    const previousLevel=p.level;
    this.collect({type:'data',value:c.data});
+   this.awardExperience?.(c.data);
    const levelsGained=p.level-previousLevel;
    this.sortieReports=creditContractReward(this.sortieReports||[],c,b);
    this.lastContractReceipt={ore:c.ore,data:c.data,levelsGained,
@@ -2828,6 +2838,8 @@ export class ArcadeGame {
   const mastery=ionMasteryAward(plan.targets.length,this.ionMasteryAwarded);
   const previousLevel=this.player.level;
   if(mastery){this.ionMasteryAwarded=true;this.collect({type:'data',value:mastery});
+  // The reward pays data for research and XP for the pilot separately.
+  this.awardExperience?.(mastery);
    recordSortieIncome(this,'data','other',mastery);}
   this.heritage.vfx.nova(plan.targets[0].x,plan.targets[0].y,43,'cyan');
   this.heritage.play('ionShot',.26,{x:plan.targets[0].x,y:plan.targets[0].y});
@@ -3528,8 +3540,8 @@ export class ArcadeGame {
   else{
    if(item.source)recordSortieIncome(this,'data',item.source,item.value);
    p.data+=item.value;
-   // Combat experience is earned at the kill, independently of collected data.
-   this.awardExperience(experienceFromPickup(item));
+   // Data is research currency and never turns into XP. XP is granted explicitly
+   // at the kill, on contracts and on operations.
   }
  }
  update(dt){

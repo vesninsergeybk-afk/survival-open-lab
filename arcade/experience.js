@@ -19,11 +19,6 @@ export function developmentPointLedger(state={}){
  return {earned,spent,free,unaccounted:earned-spent-free};
 }
 
-export function experienceFromPickup(item){
- return item?.type === 'data' && item.xpGranted !== true && Number.isFinite(item.value)
-  ? Math.max(0,item.value) : 0;
-}
-
 // Participation must be recent: stationary dock defenses must not auto-level
 // a pilot who never engaged the attackers.
 export function qualifiesForDirectCombatXp(enemy,now){

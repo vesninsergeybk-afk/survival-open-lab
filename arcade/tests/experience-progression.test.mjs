@@ -6,7 +6,7 @@ import {enemyDataReward} from '../combat-rewards.js';
 import {contractChoices} from '../base-panel.js';
 import {RuntimeHarness} from './runtime-game.mjs';
 import {OPENING_ARC} from '../opening-arc.js';
-import {XP_CURVE_VERSION,FIRST_RICH_ASTEROID_XP,experienceFromPickup,
+import {XP_CURVE_VERSION,FIRST_RICH_ASTEROID_XP,
  grantExperience,firstRichAsteroidExperience,qualifiesForDirectCombatXp,migrateLegacyPlayerExperience} from '../experience.js';
 
 const pilot=(level=1,xp=0,points=0)=>({level,xp,points});
@@ -29,17 +29,17 @@ test('the opening combat contract now grants a meaningful first level',()=>{
  assert.deepEqual({level:p.level,xp:p.xp,points:p.points},{level:2,xp:1,points:1});
 });
 
-test('combat XP arrives on destruction; looted data cannot award it twice',()=>{
+test('data is a research currency and never awards experience',()=>{
  const p=pilot(),xp=enemyDataReward({type:'scout',maxHp:28});
  grantExperience(p,xp);
- const drop={type:'data',source:'combat',value:xp,xpGranted:true};
- assert.equal(experienceFromPickup(drop),0);
- assert.equal(experienceFromPickup({type:'data',source:'combat',value:xp}),xp,
-  'older or unattended combat drops keep their pickup XP');
- grantExperience(p,experienceFromPickup(drop));
- assert.equal(p.xp,xp);
- assert.equal(experienceFromPickup({type:'data',source:'operation',value:27}),27);
- assert.equal(experienceFromPickup({type:'ore',source:'mining',value:20}),0);
+ const before={level:p.level,xp:p.xp,points:p.points};
+ // A data pickup adds to the research counter elsewhere; it must not move XP.
+ const drop={type:'data',source:'operation',value:27};
+ assert.equal(drop.type,'data');
+ assert.deepEqual({level:p.level,xp:p.xp,points:p.points},before,
+  'collecting data must not change level, xp or points');
+ grantExperience(p,0);
+ assert.deepEqual({level:p.level,xp:p.xp,points:p.points},before);
 });
 
 test('direct XP requires recent player participation, preventing AFK station farming',()=>{
