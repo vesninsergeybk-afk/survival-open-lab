@@ -33,6 +33,9 @@ export const radarPoint = (x,y,player,range=1100) => {
 const display = (node,value) => {const s=String(value);if(node.textContent!==s)node.textContent=s;};
 export class CockpitDisplay {
  constructor() {
+  // Diagnostics stay out of the player's HUD; ?debug=1 brings them back.
+  if(typeof document!=='undefined'&&typeof location!=='undefined'&&new URLSearchParams(location.search).get('debug')==='1')document.body.classList.add('debug');
+
   this.root=el('hud');this.frame=el('cockpitFrame');
   this.radar=el('radar');this.ctx=this.radar.getContext('2d',{alpha:true});
   this.lastRadar=-Infinity;this.lastCondition='';this.oreGained=0;this.oreGainTime=-Infinity;

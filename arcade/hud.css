@@ -284,3 +284,9 @@
  #hud.cockpit-hud.is-hit .wing-left,.cockpit-hud .ore-resource.is-gaining,
  .cockpit-hud .ore-resource.is-gaining #oreGain{animation:none}
 }
+
+/* --- HUD audit 2026-11-06 ----------------------------------------------------
+   FPS and target count are developer diagnostics, not player information.
+   They stay available for tuning via ?debug=1 and are hidden in a normal run. */
+#hud .telemetry-foot .perf{display:none}
+body.debug #hud .telemetry-foot .perf{display:inline}
