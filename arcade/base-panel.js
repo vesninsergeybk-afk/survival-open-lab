@@ -828,7 +828,7 @@ export function renderBasePanel(base,state){
   stationNextStep(base,state,o,!!(regionalGoal||campaign)):
   state.firstHardwareReward==='pending'?'<section class="base-home-reward"><h3>Вы получили новое оружие</h3>'+firstReward+'</section>':
   state.lastContractReceipt?.firstHardwareReward===state.firstHardwareReward&&Object.hasOwn(FIRST_CONTRACT_MODULES,state.firstHardwareReward)?
-  stationNextStep(base,state,o):'';
+  stationNextStep(base,state,o):stationNextStep(base,state,o,!!(regionalGoal||campaign));
  const receipt=state.lastContractReceipt;
  const earnedReward=receipt&&!state.contract?'<section class="base-auto-contract-receipt" role="status" aria-label="Награда за заказ получена">'+
   '<span class="base-kicker">ЗАКАЗ ЗАВЕРШЁН</span><strong>Награда зачислена</strong>'+
@@ -950,7 +950,7 @@ export function renderBasePanel(base,state){
   '<p class="base-defense-tradeoff" role="note">'+(protection.meteorEnabled?
    'Если пропускать орбитальные удары, они смогут поражать врагов и астероиды, но также могут повредить Ваш корабль.':
    'Перехват отключён: орбитальные удары могут поражать врагов, астероиды и Ваш корабль.')+'</p>'+
-  '<div class="base-defense-choice">'+meteorChoice+'</div></details>'+
+  '<div class="base-defense-choice">'+meteorChoice.replace('<button type="button"','<button type="button" aria-pressed="'+(!protection.meteorEnabled)+'"')+'</div></details>'+
   '<details class="base-secondary-info base-defense-rules"><summary>Точные условия ПВО и стазиса</summary><div class="base-secondary-body">'+
   '<p class="base-defense-status">'+protectionText+'.</p>'+
   '<p>ПВО отражает одну угрозу за заряд. Между перехватами проходит не меньше 0,7 с; снаряды остаются под защитой и при пропуске орбитальных ударов.</p>'+

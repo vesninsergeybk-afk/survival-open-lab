@@ -343,3 +343,23 @@
 .map-operation-cue span{font-size:12px;line-height:1.4;color:#cbd7e4}
 #overlay .map-operation-cue button{flex-shrink:0;margin:0;padding:10px 14px;min-height:43px;background:#4c3d59;border-color:#bd9ed0;color:#fff0ff}
 @media(max-width:650px){.map-operation-cue{flex-wrap:wrap}.map-operation-cue>div{flex-basis:100%}#overlay .map-operation-cue button{width:100%}}
+
+/* --- Menu audit 2026-11-06 --------------------------------------------------
+   The "what is important now" block already existed but its action was invisible:
+   an !important rule painted it transparent and near-black text (contrast 1.34:1
+   on the dark panel). Make the first action a readable, clearly primary button.
+   Cream fill with dark text reads correctly on both the dark and the light
+   variants of the block. Micro-labels raised to a legible size; touch targets
+   guaranteed at 44 px on phones. */
+/* Secondary actions in the same block were also near-black on the dark
+   gradient; give them light text and an outline instead. */
+#overlay .base-dialog .base-next-actions button{color:#e8f4f2 !important;border:1px solid #7d9aa3 !important}
+#overlay .base-dialog .base-next-actions button:first-of-type{background:#e9e2cf !important;
+ color:#14181a !important;border-color:#f0e8d4 !important;font-weight:750;
+ min-height:40px;padding:0 16px;box-shadow:0 2px 10px #0006}
+#overlay .base-dialog .base-next-actions button:first-of-type:hover{background:#fff8e3 !important;color:#101416 !important}
+#overlay .base-dialog .base-kicker{font-size:10px}
+#overlay .base-dialog .base-reason{font-size:11px}
+@media (max-width:640px),(pointer:coarse){
+ #overlay .base-dialog button:not(.menu-info):not([role="tab"]){min-height:44px}
+}
