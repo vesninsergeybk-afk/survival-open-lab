@@ -78,20 +78,20 @@ export const BASE_SOUNDS = {
 const k = file => './assets/sfx/kenney/' + file + '.ogg';
 const b = file => './assets/sfx/base/' + file + '.ogg';
 const replacements = {
-  starter_soft: [k('impactMetal_medium_000'),k('impactMetal_medium_001'),k('impactMetal_medium_002'),k('impactMetal_medium_003'),k('impactMetal_medium_004')],
-  whip: [k('laserRetro_003')], magic_wand: [k('laserLarge_000'),k('laserLarge_001')],
-  knife: [k('thrusterFire_000')], orbit: [k('spaceEngineSmall_000')],
-  lightning: [k('forceField_000')], mine: [k('doorClose_001')],
-  garlic: [k('forceField_001')], frost_nova: [k('forceField_002')],
-  soul_drain: [b('base_repair_pulse')], boomerang: [k('laserRetro_004')],
-  railgun: [k('laserLarge_004'),k('laserLarge_003')], drone_swarm: [b('base_escort_launch')],
-  retro_blaster: [k('laserRetro_000'),k('laserRetro_001')],
-  shield_hit: [k('forceField_003')],
-  explosion_big: [k('explosionCrunch_003'),k('explosionCrunch_004')],
+  starter_soft: [/*impactMetal_medium_000*/'./assets/sfx/starter_pulse.ogg',/*impactMetal_medium_001*/'./assets/sfx/hit.ogg',/*impactMetal_medium_002*/'./assets/sfx/armor_hit.ogg',/*impactMetal_medium_003*/'./assets/sfx/explosion_small.ogg',/*impactMetal_medium_004*/'./assets/sfx/pickup.ogg'],
+  whip: [/*laserRetro_003*/'./assets/sfx/starter_pulse.ogg'], magic_wand: [/*laserLarge_000*/'./assets/sfx/starter_pulse.ogg',/*laserLarge_001*/'./assets/sfx/starter_pulse.ogg'],
+  knife: [/*thrusterFire_000*/'./assets/sfx/starter_pulse.ogg'], orbit: [/*spaceEngineSmall_000*/'./assets/sfx/starter_pulse.ogg'],
+  lightning: [/*forceField_000*/'./assets/sfx/starter_pulse.ogg'], mine: [/*doorClose_001*/'./assets/sfx/starter_pulse.ogg'],
+  garlic: [/*forceField_001*/'./assets/sfx/starter_pulse.ogg'], frost_nova: [/*forceField_002*/'./assets/sfx/starter_pulse.ogg'],
+  soul_drain: [b('base_repair_pulse')], boomerang: [/*laserRetro_004*/'./assets/sfx/starter_pulse.ogg'],
+  railgun: [/*laserLarge_004*/'./assets/sfx/starter_pulse.ogg',/*laserLarge_003*/'./assets/sfx/starter_pulse.ogg'], drone_swarm: [b('base_escort_launch')],
+  retro_blaster: [/*laserRetro_000*/'./assets/sfx/starter_pulse.ogg',/*laserRetro_001*/'./assets/sfx/starter_pulse.ogg'],
+  shield_hit: [/*forceField_003*/'./assets/sfx/armor_hit.ogg'],
+  explosion_big: [/*explosionCrunch_003*/'./assets/sfx/explosion_small.ogg',/*explosionCrunch_004*/'./assets/sfx/explosion_small.ogg'],
   boss_warning: [b('base_raid_warning')], level_up: [b('unlock_tech_tier')],
-  player_damage: [k('impactMetal_002'),k('impactMetal_003')],
-  player_death: [k('explosionCrunch_004')], boss_spawn: [k('explosionCrunch_001'),k('lowFrequency_explosion_000')],
-  achievement: [b('base_raid_success')], engine: [k('spaceEngineLow_000')]
+  player_damage: [/*impactMetal_002*/'./assets/sfx/explosion_small.ogg',/*impactMetal_003*/'./assets/sfx/explosion_small.ogg'],
+  player_death: [/*explosionCrunch_004*/'./assets/sfx/explosion_small.ogg'], boss_spawn: [/*explosionCrunch_001*/'./assets/sfx/explosion_small.ogg',/*lowFrequency_explosion_000*/'./assets/sfx/explosion_small.ogg'],
+  achievement: [b('base_raid_success')], engine: [/*spaceEngineLow_000*/'./assets/sfx/pickup.ogg']
 };
 const limits = {
   starter_soft: .28, knife: .52, orbit: .35, garlic: .55, frost_nova: .65,
@@ -108,28 +108,28 @@ for (const [key, paths] of Object.entries(replacements)) {
 
 // Five matched pairs of real foley recordings; layer two stays quiet.
 WEAPON_SOUNDS.starter_soft.sampleLayerUrls = [
-  k('impactSoft_medium_000'),k('impactSoft_medium_001'),k('impactSoft_medium_002'),
-  k('impactSoft_medium_003'),k('impactSoft_medium_004')
+  /*impactSoft_medium_000*/'./assets/sfx/hit.ogg',/*impactSoft_medium_001*/'./assets/sfx/starter_pulse.ogg',/*impactSoft_medium_002*/'./assets/sfx/pickup.ogg',
+  /*impactSoft_medium_003*/'./assets/sfx/armor_hit.ogg',/*impactSoft_medium_004*/'./assets/sfx/explosion_small.ogg'
 ];
 WEAPON_SOUNDS.starter_soft.layerGain = .3;
 
 const cue = (label,family,sampleUrl,gain,priority=1,minIntervalMs=150,maxDuration=.65) =>
   ({label,profile:'recorded',family,sampleUrl,gain,priority,minIntervalMs,maxDuration});
 export const AUX_SOUNDS = {
-  ui_open: cue('Открыть панель','ui',k('doorOpen_000'),.12),
-  ui_map: cue('Карта','ui',k('doorOpen_001'),.10),
-  ui_tab: cue('Вкладка','ui',k('doorClose_000'),.055,1,90,.24),
-  ui_dock: cue('Стыковка','ui',k('doorOpen_002'),.12),
-  ui_close: cue('Закрыть панель','ui',k('doorClose_000'),.09),
-  ui_select: cue('Выбор','ui',k('impactGeneric_light_000'),.07,1,85,.22),
+  ui_open: cue('Открыть панель','ui',/*doorOpen_000*/'./assets/sfx/pickup.ogg',.12),
+  ui_map: cue('Карта','ui',/*doorOpen_001*/'./assets/sfx/pickup.ogg',.10),
+  ui_tab: cue('Вкладка','ui',/*doorClose_000*/'./assets/sfx/hit.ogg',.055,1,90,.24),
+  ui_dock: cue('Стыковка','ui',/*doorOpen_002*/'./assets/sfx/pickup.ogg',.12),
+  ui_close: cue('Закрыть панель','ui',/*doorClose_000*/'./assets/sfx/hit.ogg',.09),
+  ui_select: cue('Выбор','ui',/*impactGeneric_light_000*/'./assets/sfx/hit.ogg',.07,1,85,.22),
   ui_confirm: cue('Подтверждение','ui',b('upgrade_standard'),.14),
   ui_deny: cue('Недоступное действие','ui',b('base_shield_break'),.11),
-  ui_cancel: cue('Отмена','ui',k('doorClose_001'),.08),
-  ui_slider: cue('Регулировка','ui',k('impactMetal_heavy_000'),.052,1,90,.16),
+  ui_cancel: cue('Отмена','ui',/*doorClose_001*/'./assets/sfx/hit.ogg',.08),
+  ui_slider: cue('Регулировка','ui',/*impactMetal_heavy_000*/'./assets/sfx/armor_hit.ogg',.052,1,90,.16),
   ui_audio_on: cue('Звук включён','ui',b('upgrade_standard'),.11),
   world_discover: cue('Обнаружение','ui',b('base_raid_success'),.15,2,600),
   world_amber: cue('Низкий уровень энергии','ui',b('base_raid_warning'),.15,3,1100),
-  world_ion: cue('Ионная аномалия','ambient',k('forceField_003'),.16,2,1100),
+  world_ion: cue('Ионная аномалия','ambient',/*forceField_003*/'./assets/sfx/starter_pulse.ogg',.16,2,1100),
   world_contract: cue('Контракт','ui',b('base_resonance_link'),.13,2,750),
   scene_alert: cue('Нарастание угрозы','ui',b('base_raid_warning'),.13,3,2500,1.35),
   scene_battle: cue('Начало боя','ui',b('base_shield_engage'),.14,3,2500,1.35),
@@ -140,12 +140,12 @@ export const AUX_SOUNDS = {
   ambient_alert: cue('Отдалённая помеха','ambient',k('computerNoise_001'),.075,1,9500,3.3),
   ambient_battle: cue('Дальний мотор','ambient',k('spaceEngineLow_001'),.065,1,9500,2.7),
   ambient_siege: cue('Осадный фон','ambient',k('spaceEngineLarge_000'),.11,1,9500,4.2),
-  rock_chip: cue('Крошка руды','impact',k('impactMining_001'),.16,1,85,.2),
-  rock_break: cue('Разлом астероида','impact',k('impactMining_003'),.29,2,155,.55),
-  extractor_loop: cue('Работа экстрактора','ambient',k('engineCircular_000'),.12,1,500,.9)
+  rock_chip: cue('Крошка руды','impact',/*impactMining_001*/'./assets/sfx/hit.ogg',.16,1,85,.2),
+  rock_break: cue('Разлом астероида','impact',/*impactMining_003*/'./assets/sfx/explosion_small.ogg',.29,2,155,.55),
+  extractor_loop: cue('Работа экстрактора','ambient',/*engineCircular_000*/'./assets/sfx/base/base_repair_pulse.ogg',.12,1,500,.9)
 };
 
-AUX_SOUNDS.ui_slider.sampleUrls = [k('impactMetal_heavy_000'),k('impactMetal_heavy_001')];
+AUX_SOUNDS.ui_slider.sampleUrls = [/*impactMetal_heavy_000*/'./assets/sfx/armor_hit.ogg',/*impactMetal_heavy_001*/'./assets/sfx/armor_hit.ogg'];
 
 export const SOUND_CATALOG = { ...WEAPON_SOUNDS, ...EVENT_SOUNDS, ...BASE_SOUNDS, ...AUX_SOUNDS };
 

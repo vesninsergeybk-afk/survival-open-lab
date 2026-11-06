@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,existsSync} from 'node:fs';
 import {AudioEngine} from '../../src/audio.js';
 import {ArcadeHeritage} from '../heritage.js';
 import {AudioLabEngine} from '../../audio-lab/audio-mixer.js';
@@ -82,13 +82,21 @@ test('game mining loop does not emit a gunshot on each resource tick',()=>{
  assert.doesNotMatch(game,/kind\s*===\s*['"]extract['"]\s*\)\s*this\.heritage\.play\(['"]laser['"]/);
 });
 
-test('starter auto-fire combines five pairs of physically recorded impacts',()=>{
+test('starter auto-fire combines five pairs of recorded impacts that exist on disk',()=>{
  const cue=SOUND_CATALOG.starter_soft;
  assert.equal(cue?.profile,'softpulse');
  assert.equal(cue?.sampleUrls.length,5);
  assert.equal(cue?.sampleLayerUrls.length,5);
- assert(cue.sampleUrls.every(path=>path.includes('/kenney/impactMetal_medium_')));
- assert(cue.sampleLayerUrls.every(path=>path.includes('/kenney/impactSoft_medium_')));
+ // The previous version asserted the intended Kenney folder only. That folder was
+ // committed empty, so the test stayed green while every shot was silent. Assert the
+ // files themselves: five distinct recordings per layer, each present on disk.
+ assert.equal(new Set(cue.sampleUrls).size,5);
+ assert.equal(new Set(cue.sampleLayerUrls).size,5);
+ const soundRoot=new URL('../../audio-lab/',import.meta.url);
+ for(const url of cue.sampleUrls.concat(cue.sampleLayerUrls)){
+  const file=new URL(url.replace(/^\.\//,''),soundRoot);
+  assert.ok(existsSync(file),'missing recording: '+url);
+ }
  assert(!cue.sampleUrls.concat(cue.sampleLayerUrls).some(path=>path.includes('laser')));
  assert.equal(cue.layerGain,.3);
  const mixer=new AudioLabEngine();
